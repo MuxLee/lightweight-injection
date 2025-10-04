@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "lib": ["ES6"],
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "noEmit": true,
+        "strict": true,
+        "paths": {
+            "@inject/*": ["./src/inject/*"],
+            "@injection/*": ["./src/injection/*"],
+            "@injector/*": ["./src/injector/*"],
+            "@util/*": ["./src/util/*"]
+        },
+        "target": "es2020",
+        "types": ["vitest"]
+    },
+    "include": ["src", "test"]
+}
