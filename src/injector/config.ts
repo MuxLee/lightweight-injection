@@ -19,7 +19,7 @@ function injectorConfig(injectorConfigFunciton: InjectorConfigFunction, injector
     return new Proxy(injectorConfigFunciton, {
         apply(target, thisArgument, argumentArray) {
             Reflect.apply(target, thisArgument, argumentArray);
-            process.stdout.write('Initialize injection config \'(' + injectorConfigName + '\')\n');
+            process.stdout.write(`Initialize injection config ('${injectorConfigName}')\n`);
         },
         getPrototypeOf() {
             return injectorConfig;
