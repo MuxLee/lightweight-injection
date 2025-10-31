@@ -32,13 +32,12 @@ interface InjectionToken<P> {
 /**
  * 의존성 주입 토큰 클래스
  *
- * @protected
  * @template P 의존성 제공자 유형
  * @implements {InjectionToken<P>}
  * @author Mux
  * @version 1.0.0
  */
-class _InjectionToken<P> implements InjectionToken<P> {
+abstract class AbstractInjectionToken<P> implements InjectionToken<P> {
 
     /**
      * 의존성 고유값
@@ -48,7 +47,7 @@ class _InjectionToken<P> implements InjectionToken<P> {
     #identity: string;
 
     /**
-     * {@link _InjectionToken} 클래스의 생성자입니다.
+     * {@link AbstractInjectionToken} 클래스의 생성자입니다.
      *
      * @param {string} identity 의존성 고유값
      */
@@ -81,9 +80,9 @@ class _InjectionToken<P> implements InjectionToken<P> {
  * 클래스 배열 의존성 주입 토큰 클래스
  * 
  * @template {Class[]} P 의존성 제공자 유형
- * @extends {_InjectionToken<ConsturctorInstanceTuple<P>>}
+ * @extends {AbstractInjectionToken<ConsturctorInstanceTuple<P>>}
  */
-class ArrayInjectionToken<P extends Class[]> extends _InjectionToken<ConsturctorInstanceTuple<P>> {
+class ArrayInjectionToken<P extends Class[]> extends AbstractInjectionToken<ConsturctorInstanceTuple<P>> {
 
     /**
      * 클래스 개체 튜플
@@ -122,11 +121,11 @@ class ArrayInjectionToken<P extends Class[]> extends _InjectionToken<Consturctor
  * 클래스 의존성 주입 토큰 클래스
  * 
  * @template {Class} P 의존성 제공자 유형
- * @extends {_InjectionToken<InstanceType<P>>}
+ * @extends {AbstractInjectionToken<InstanceType<P>>}
  * @author Mux
  * @version 1.0.0
  */
-class ClassInjectionToken<P extends Class> extends _InjectionToken<InstanceType<P>> {
+class ClassInjectionToken<P extends Class> extends AbstractInjectionToken<InstanceType<P>> {
 
     /**
      * 클래스 개체
@@ -163,11 +162,11 @@ class ClassInjectionToken<P extends Class> extends _InjectionToken<InstanceType<
  * 하위 의존성이 포함된 클래스 의존성 토큰 클래스
  * 
  * @template {Class} P 의존성 제공자 유형
- * @extends {_InjectionToken<InstanceType<P>>}
+ * @extends {AbstractInjectionToken<InstanceType<P>>}
  * @author Mux
  * @version 1.0.0
  */
-class DependClassInjectionToken<P extends Class> extends _InjectionToken<InstanceType<P>> {
+class DependClassInjectionToken<P extends Class> extends AbstractInjectionToken<InstanceType<P>> {
 
     /**
      * 클래스 개체
@@ -215,11 +214,11 @@ class DependClassInjectionToken<P extends Class> extends _InjectionToken<Instanc
  * 클래스 팩토리 의존성 주입 토큰 클래스
  *
  * @template P 의존성 제공자 유형
- * @extends {_InjectionToken<P>}
+ * @extends {AbstractInjectionToken<P>}
  * @author Mux
  * @version 1.0.0
  */
-class FactoryInjectionToken<P> extends _InjectionToken<P> {
+class FactoryInjectionToken<P> extends AbstractInjectionToken<P> {
 
     /**
      * 의존성 생성기
@@ -256,11 +255,11 @@ class FactoryInjectionToken<P> extends _InjectionToken<P> {
  * 클래스 튜플 팩토리 의존성 주입 토큰 클래스
  *
  * @template {ClassInstance<any>[]} P 의존성 제공자 유형
- * @extends {_InjectionToken<Tuple<P>>}
+ * @extends {AbstractInjectionToken<Tuple<P>>}
  * @author Mux
  * @version 1.0.0
  */
-class TupleFactoryInjectionToken<P extends ClassInstance<unknown>[]> extends _InjectionToken<P> {
+class TupleFactoryInjectionToken<P extends ClassInstance<unknown>[]> extends AbstractInjectionToken<P> {
 
     /**
      * 튜플 팩토리 개체
