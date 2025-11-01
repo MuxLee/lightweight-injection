@@ -29,7 +29,7 @@ const injectionIdentityParserMock = {
 };
 const injector = new StoredInjector();
 
-injector.registerInjectionIdentityParser(injectionIdentityParserMock);
+injector.registerParser(injectionIdentityParserMock);
 
 test('의존성 생성 테스트', function() {
     expect(function() {
