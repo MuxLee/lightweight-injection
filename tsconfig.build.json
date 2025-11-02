@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "noEmit": false,
+        "outDir": "./build"
+    },
+    "extends": "./tsconfig.json",
+    "include": ["src"],
+    "tsc-alias": {
+        "resolveFullPaths": true
+    }
+}

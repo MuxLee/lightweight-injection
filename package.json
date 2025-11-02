@@ -3,7 +3,10 @@
     "version": "1.0.0",
     "description": "A lightweight dependency injector for JavaScript and TypeScript.",
     "exports": {
-        "./*": "./build/*.js"
+        "./inject": "./build/inject/index.js",
+        "./injection": "./build/injection/index.js",
+        "./injector": "./build/injector/index.js",
+        "./util": "./build/util/index.js"
     },
     "files": [
         "build"
@@ -11,26 +14,26 @@
     "type": "module",
     "types": "build/index.d.ts",
     "scripts": {
-        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && npm run tree-shake",
+        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
         "test": "vitest",
         "test:coverage": "vitest --coverage",
-        "test:watch": "vitest --watch",
-        "tree-shake": "find build -name '*.js' -size 1 -delete"
+        "test:watch": "vitest --watch"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/MuxLee/light-inject.git"
+        "url": "git+https://github.com/MuxLee/lightweight-injection.git"
     },
     "keywords": [
         "inject",
-        "injection"
+        "injection",
+        "injector"
     ],
     "author": "Mux",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/MuxLee/light-inject/issues"
+        "url": "https://github.com/MuxLee/lightweight-injection/issues"
     },
-    "homepage": "https://github.com/MuxLee/light-inject#readme",
+    "homepage": "https://github.com/MuxLee/lightweight-injection#readme",
     "devDependencies": {
         "@eslint/js": "^9.39.1",
         "@types/node": "^24.10.1",
