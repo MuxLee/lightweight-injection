@@ -1,4 +1,4 @@
-import type { Injector } from '@injector/injector';
+import type { GetInjector } from '@injector/injector';
 
 /**
  * 의존성 생성기 유형
@@ -7,7 +7,7 @@ import type { Injector } from '@injector/injector';
  * @author Mux
  * @version 1.0.0
  */
-type InjectionFactory<T> = (injector: Pick<Injector, 'get'>) => T;
+type InjectionFactory<T> = (injector: GetInjector) => T;
 
 export type {
     InjectionFactory
