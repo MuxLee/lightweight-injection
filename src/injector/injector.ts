@@ -102,7 +102,7 @@ abstract class AbstractInjector implements Injector {
      * 의존성 고유값 추출기를 등록합니다.
      * 
      * @template T 개체 유형
-     * @param {InjectionIdentityParser} parser 의존성 고유값 추출기
+     * @param {InjectionIdentityParser<T>} parser 의존성 고유값 추출기
      * @returns {void}
      */
     registerParser<T>(parser: InjectionIdentityParser<T>): void {
