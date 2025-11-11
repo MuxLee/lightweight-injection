@@ -25,14 +25,6 @@ type CreateInjector = Pick<Injector, 'create'>;
 type GetInjector = Pick<Injector, 'get'>;
 
 /**
- * 의존성 처리 유형
- * 
- * @author Mux
- * @version 1.0.0
- */
-type ResolveInjector = Pick<Injector, 'resolve'>;
-
-/**
  * 의존성 관리 인터페이스
  *
  * @author Mux
@@ -79,6 +71,14 @@ interface Injector {
     resolve<T>(object: Injection<T> | string): void;
 
 }
+
+/**
+ * 의존성 지연 유형
+ * 
+ * @author Mux
+ * @version 1.0.0
+ */
+type LazyInjector = Pick<Injector, 'lazy'>;
 
 /**
  * 의존성 관리 추상 클래스
@@ -327,7 +327,8 @@ class StoredInjector extends AbstractInjector {
 export type {
     CreateInjector,
     GetInjector,
-    Injector
+    Injector,
+    LazyInjector
 };
 
 export {

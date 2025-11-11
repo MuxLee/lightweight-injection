@@ -1,4 +1,4 @@
-import type { CreateInjector } from '@injector/injector';
+import type { CreateInjector, LazyInjector } from '@injector/injector';
 
 /**
  * 의존성 설정 함수 유형
@@ -6,7 +6,7 @@ import type { CreateInjector } from '@injector/injector';
  * @author Mux
  * @version 1.0.0
  */
-type InjectorConfigFunction = (injector: CreateInjector) => void;
+type InjectorConfigFunction = (injector: CreateInjector & LazyInjector) => void;
 
 /**
  * 의존성을 설정합니다.
