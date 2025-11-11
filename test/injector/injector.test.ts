@@ -60,3 +60,12 @@ test('의존성 불러오기 테스트', function() {
     }).not.toThrowError();
     expect(injector.get('MyExample2')).instanceOf(Example2);
 });
+
+test('의존성 지연 불러오기 테스트', function() {
+    const lazyMock = vi.fn();
+
+    injector.lazy('ExampleLazy', lazyMock);
+    injector.create(class ExampleLazy {});
+    injector.resolve('ExampleLazy');
+    expect(lazyMock).toHaveBeenCalled();
+});
