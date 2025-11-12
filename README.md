@@ -263,6 +263,7 @@ interface InjectionIdentityParser<T> {
 
 ## Token
 의존성 개체를 등록하는 또 다른 방법을 제공합니다.
+> ❇️ **Angular**의 [`InjectionToken`](https://angular.dev/api/core/InjectionToken)에 영감을 받았습니다.
 &nbsp;
 
 `ArrayInjectionToken`는 클래스 개체가 담긴 배열을 의존성으로 등록할 때 사용되며, 객체를 가져올 때는 `tuple` 형태로 제공되어 배열 요소를 자동으로 추론합니다.
