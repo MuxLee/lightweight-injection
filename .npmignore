@@ -1,0 +1,14 @@
+.DS_Store
+.git*
+.idea
+.vscode
+
+node_modules/
+src/
+test/
+
+eslint.config.ts
+tsconfig.json
+tsconfig.build.json
+package-lock.json
+vitest.config.ts
