@@ -1,0 +1,44 @@
+{
+    "name": "lightweight-injection",
+    "version": "1.0.0",
+    "description": "A lightweight dependency injector for JavaScript and TypeScript.",
+    "exports": {
+        "./*": "./build/*.js"
+    },
+    "files": [
+        "build"
+    ],
+    "type": "module",
+    "types": "build/index.d.ts",
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && npm run tree-shake",
+        "test": "vitest",
+        "test:coverage": "vitest --coverage",
+        "test:watch": "vitest --watch",
+        "tree-shake": "find build -name '*.js' -size 1 -delete"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MuxLee/light-inject.git"
+    },
+    "keywords": [
+        "inject",
+        "injection"
+    ],
+    "author": "Mux",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/MuxLee/light-inject/issues"
+    },
+    "homepage": "https://github.com/MuxLee/light-inject#readme",
+    "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@types/node": "^24.10.1",
+        "eslint": "^9.39.1",
+        "globals": "^16.5.0",
+        "jiti": "^2.6.1",
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.48.0"
+    }
+}
