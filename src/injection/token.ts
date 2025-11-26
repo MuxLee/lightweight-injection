@@ -72,7 +72,7 @@ class _InjectionToken<P> implements InjectionToken<P> {
      * @returns {P} 의존성 제공자
      */
     provide(injector: Injector): P {
-        throw new Error('\'provide\' 메소드가 구현되지 않았습니다.');
+        throw new Error(`'provide' 메소드가 구현되지 않았습니다.`);
     };
 
 }

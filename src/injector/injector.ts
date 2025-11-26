@@ -68,7 +68,7 @@ abstract class AbstractInjector implements Injector {
      * @returns {Injector} 의존성 주입자
      */
     create<T>(object: Injection<T>, options?: InjectorOptions<T> | undefined): Injector {
-        throw new Error('\'create\' 메소드가 구현되지 않았습니다.');
+        throw new Error(`'create' 메소드가 구현되지 않았습니다.`);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractInjector implements Injector {
      * @returns {T} 의존성 개체
      */
     get<T>(object: Injection<T> | string): T {
-        throw new Error('\'get\' 메소드가 구현되지 않았습니다.');
+        throw new Error(`'get' 메소드가 구현되지 않았습니다.`);
     }
 
     /**
