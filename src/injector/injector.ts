@@ -8,6 +8,22 @@ import type { ClassInstance } from '@util/util';
 import { isClass } from '@util/util';
 
 /**
+ * 의존성 생성 유형
+ * 
+ * @author Mux
+ * @version 1.0.0
+ */
+type CreateInjector = Pick<Injector, 'create'>;
+
+/**
+ * 의존성 불러오기 유형
+ * 
+ * @author Mux
+ * @version 1.0.0
+ */
+type GetInjector = Pick<Injector, 'get'>;
+
+/**
  * 의존성 관리 인터페이스
  *
  * @author Mux
@@ -201,6 +217,8 @@ class StoredInjector extends AbstractInjector {
 }
 
 export type {
+    CreateInjector,
+    GetInjector,
     Injector
 };
 
