@@ -1,3 +1,4 @@
+import type { InjectListenerCallback } from '@inject/inject';
 import type { InjectionIdentity } from '@injection/identity';
 import type { Injection } from '@injection/injection';
 import type { InjectionIdentityParser } from '@injection/parser';
@@ -8,7 +9,7 @@ import type { ClassInstance } from '@util/util';
 import { isClass } from '@util/util';
 
 /**
- * 의존성 생성 유형
+ * 의존성 구성 유형
  * 
  * @author Mux
  * @version 1.0.0
@@ -24,6 +25,14 @@ type CreateInjector = Pick<Injector, 'create'>;
 type GetInjector = Pick<Injector, 'get'>;
 
 /**
+ * 의존성 처리 유형
+ * 
+ * @author Mux
+ * @version 1.0.0
+ */
+type ResolveInjector = Pick<Injector, 'resolve'>;
+
+/**
  * 의존성 관리 인터페이스
  *
  * @author Mux
@@ -32,11 +41,11 @@ type GetInjector = Pick<Injector, 'get'>;
 interface Injector {
 
     /**
-     * 의존성을 생성합니다.
+     * 의존성을 구성합니다.
      *
      * @template T 개체 유형
      * @param {Injection<T>} object 의존성 개체
-     * @param {InjectorOptions<T> | undefined} options 의존성 생성 설정
+     * @param {InjectorOptions<T> | undefined} options 의존성 구성 설정
      * @returns {Injector} 의존성 주입자
      */
     create<T>(object: Injection<T>, options?: InjectorOptions<T> | undefined): Injector;
@@ -49,6 +58,25 @@ interface Injector {
      * @returns {T} 의존성 개체
      */
     get<T>(object: Injection<T> | string): T;
+
+    /**
+     * 의존성 개체를 지연하여 가져옵니다.
+     * 
+     * @template T 개체 유형
+     * @param {Injection<T> | string} object 의존성 개체
+     * @param {InjectListenerCallback<T>} listener 의존성 주입 콜백
+     * @returns {void}
+     */
+    lazy<T>(object: Injection<T> | string, listener: InjectListenerCallback<T>): void;
+
+    /**
+     * 의존성을 처리합니다.
+     * 
+     * @template T 개체 유형
+     * @param {Injection<T> | string} object 의존성 개체
+     * @returns {void}
+     */
+    resolve<T>(object: Injection<T> | string): void;
 
 }
 
@@ -99,14 +127,37 @@ abstract class AbstractInjector implements Injector {
     }
 
     /**
+     * 의존성 개체를 지연하여 가져옵니다.
+     * 
+     * @template T 개체 유형
+     * @param {Injection<T> | string} object 의존성 개체
+     * @param {InjectListenerCallback<T>} listener 의존성 주입 수신자
+     * @returns {void}
+     */
+    lazy<T>(object: Injection<T> | string, listener: InjectListenerCallback<T>): void {
+        throw new Error(`'lazy' 메소드가 구현되지 않았습니다.`);
+    }
+
+    /**
      * 의존성 고유값 추출기를 등록합니다.
      * 
      * @template T 개체 유형
-     * @param {InjectionIdentityParser} parser 의존성 고유값 추출기
+     * @param {InjectionIdentityParser<T>} parser 의존성 고유값 추출기
      * @returns {void}
      */
     registerParser<T>(parser: InjectionIdentityParser<T>): void {
         this.#injectorIdentityParsers.push(parser);
+    }
+
+    /**
+     * 의존성을 처리합니다.
+     * 
+     * @template T 개체 유형
+     * @param {Injection<T> | string} object 의존성 개체
+     * @returns {void}
+     */
+    resolve<T>(object: Injection<T> | string): void {
+        throw new Error(`'resolve' 메소드가 구현되지 않았습니다.`);
     }
 
     /**
@@ -155,12 +206,20 @@ class StoredInjector extends AbstractInjector {
     #instanceStorage: Map<InjectionIdentity, ClassInstance<any>>;
 
     /**
+     * 의존성 수신자 저장소
+     * 
+     * @type {Map<InjectionIdentity, InjectListenerCallback<any>[]>};
+     */
+    #listenerStorage: Map<InjectionIdentity, InjectListenerCallback<any>[]>;
+
+    /**
      * {@link StoredInjector} 클래스의 생성자입니다.
      */
     constructor() {
         super();
         this.#dependencyStorage = new Map();
         this.#instanceStorage = new Map();
+        this.#listenerStorage = new Map();
     }
 
     /**
@@ -192,12 +251,67 @@ class StoredInjector extends AbstractInjector {
      */
     get<T>(object: Injection<T> | string): T {
         const injectionIdentity = super._parse(object);
+
+        this.#createInstance(injectionIdentity);
+
         const instance = this.#instanceStorage.get(injectionIdentity);
 
         if (instance) {
             return instance;
         }
 
+        const identity = injectionIdentity.toString();
+
+        throw new Error(`의존성 객체를 찾을 수 없습니다. ('${identity}')`);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    lazy<T>(object: Injection<T> | string, listener: InjectListenerCallback<T>): void {
+        const injectionIdentity = super._parse(object);
+        const instance = this.#instanceStorage.get(injectionIdentity);
+
+        if (instance) {
+            listener(instance);
+
+            return;
+        }
+
+        const listeners = this.#listenerStorage.get(injectionIdentity);
+
+        if (listeners) {
+            listeners.push(listener);
+        }
+        else {
+            this.#listenerStorage.set(injectionIdentity, [listener]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    resolve<T>(object: Injection<T> | string): void {
+        const instance = this.get(object);
+        const injectionIdentity = super._parse(object);
+        const listeners = this.#listenerStorage.get(injectionIdentity);
+
+        if (listeners) {
+            for (const listener of listeners) {
+                listener(instance);
+            }
+
+            this.#listenerStorage.delete(injectionIdentity);
+        }
+    }
+
+    /**
+     * 의존성 객체를 생성합니다.
+     * 
+     * @param {InjectionIdentity} injectionIdentity 의존성 고유값
+     * @returns {void}
+     */
+    #createInstance(injectionIdentity: InjectionIdentity): void {
         const dependency = this.#dependencyStorage.get(injectionIdentity);
 
         if (dependency) {
@@ -205,13 +319,7 @@ class StoredInjector extends AbstractInjector {
 
             this.#instanceStorage.set(injectionIdentity, instance);
             this.#dependencyStorage.delete(injectionIdentity);
-
-            return instance;
         }
-
-        const identity = injectionIdentity.toString();
-
-        throw new Error(`의존성 객체를 찾을 수 없습니다. ('${identity}')`);
     }
 
 }
